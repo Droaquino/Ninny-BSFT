@@ -1,19 +1,27 @@
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Download, FileText } from 'lucide-react'
-import { MOCK_RECIPES } from '@/data/mock-recipes'
+import { ArrowLeft, Download, FileText, Loader2 } from 'lucide-react'
 import { CmvIndicator } from '@/components/ui/cmv-indicator'
 import { CategoryBadge } from '@/components/ui/badge'
 import { formatCurrency, formatPercent } from '@/lib/utils'
+import { useRecipe } from '@/hooks/useRecipes'
 
 export function RecipeDetail() {
   const { id } = useParams<{ id: string }>()
-  const recipe = MOCK_RECIPES.find((r) => r.id === id)
+  const { recipe, loading } = useRecipe(id ?? '')
+
+  if (loading) {
+    return (
+      <div className="p-8 flex items-center justify-center min-h-[40vh] text-[#03a54e]">
+        <Loader2 size={32} className="animate-spin" />
+      </div>
+    )
+  }
 
   if (!recipe) {
     return (
       <div className="p-8 text-center text-gray-400">
         <p>Ficha não encontrada.</p>
-        <Link to="/" className="text-amber-600 text-sm mt-2 inline-block">← Voltar</Link>
+        <Link to="/" className="text-[#03a54e] text-sm mt-2 inline-block">← Voltar</Link>
       </div>
     )
   }
@@ -32,7 +40,7 @@ export function RecipeDetail() {
         <div className="flex items-start justify-between mb-4">
           <div>
             <CategoryBadge category={recipe.category} />
-            <h1 className="text-2xl font-bold text-[#000000] mt-2">{recipe.name}</h1>
+            <h1 className="text-2xl font-bold text-[#03a54e] mt-2">{recipe.name}</h1>
             <p className="text-gray-400 text-sm mt-0.5">Rendimento: {recipe.portion_size_g}g por porção</p>
           </div>
           {recipe.pdf_url ? (
@@ -77,7 +85,7 @@ export function RecipeDetail() {
       {recipe.ingredients && recipe.ingredients.length > 0 && (
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-50">
-            <h2 className="font-semibold text-gray-900">Ingredientes</h2>
+            <h2 className="font-semibold text-[#03a54e]">Ingredientes</h2>
           </div>
           <table className="w-full text-sm">
             <thead>

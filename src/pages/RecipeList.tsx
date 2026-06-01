@@ -1,36 +1,37 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, FileText } from 'lucide-react'
-import { MOCK_RECIPES } from '@/data/mock-recipes'
+import { Search, FileText, Loader2 } from 'lucide-react'
 import { CATEGORY_LABELS, type Category } from '@/types/database'
 import { CmvIndicator } from '@/components/ui/cmv-indicator'
 import { CategoryBadge } from '@/components/ui/badge'
 import { formatCurrency } from '@/lib/utils'
+import { useRecipes } from '@/hooks/useRecipes'
 
 const ALL_CATEGORIES = Object.keys(CATEGORY_LABELS) as Category[]
 
 export function RecipeList() {
+  const { recipes, loading } = useRecipes()
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState<Category | 'todas'>('todas')
 
   const filtered = useMemo(() => {
-    return MOCK_RECIPES.filter((r) => {
+    return recipes.filter((r) => {
       const matchSearch = r.name.toLowerCase().includes(search.toLowerCase())
       const matchCat = activeCategory === 'todas' || r.category === activeCategory
       return matchSearch && matchCat
     })
-  }, [search, activeCategory])
+  }, [recipes, search, activeCategory])
 
   const usedCategories = useMemo(() => {
-    const cats = new Set(MOCK_RECIPES.map((r) => r.category))
+    const cats = new Set(recipes.map((r) => r.category))
     return ALL_CATEGORIES.filter((c) => cats.has(c))
   }, [])
 
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#000000]">Fichas Técnicas</h1>
-        <p className="text-gray-500 mt-1">{MOCK_RECIPES.length} fichas cadastradas</p>
+        <h1 className="text-2xl font-bold text-[#03a54e]">Fichas Técnicas</h1>
+        <p className="text-gray-500 mt-1">{loading ? 'Carregando...' : `${recipes.length} fichas cadastradas`}</p>
       </div>
 
       {/* Busca */}
@@ -73,7 +74,11 @@ export function RecipeList() {
       </div>
 
       {/* Grid de cards */}
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center py-20 text-[#03a54e]">
+          <Loader2 size={32} className="animate-spin" />
+        </div>
+      ) : filtered.length === 0 ? (
         <div className="text-center py-16 text-gray-400">
           <FileText size={40} className="mx-auto mb-3 opacity-40" />
           <p>Nenhuma ficha encontrada.</p>
