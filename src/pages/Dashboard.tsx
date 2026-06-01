@@ -7,7 +7,7 @@ import {
 } from 'recharts'
 import { useRecipes } from '@/hooks/useRecipes'
 import { MetricCard } from '@/components/ui/metric-card'
-import { CmvBar } from '@/components/ui/cmv-badge'
+
 import { CategoryBadge } from '@/components/ui/badge'
 import { cmvStatus } from '@/lib/utils'
 import { CATEGORY_LABELS } from '@/types/database'
