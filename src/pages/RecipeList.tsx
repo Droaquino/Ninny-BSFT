@@ -29,7 +29,7 @@ export function RecipeList() {
   return (
     <div className="p-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Fichas Técnicas</h1>
+        <h1 className="text-2xl font-bold text-[#000000]">Fichas Técnicas</h1>
         <p className="text-gray-500 mt-1">{MOCK_RECIPES.length} fichas cadastradas</p>
       </div>
 
@@ -41,7 +41,7 @@ export function RecipeList() {
           placeholder="Buscar prato..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full max-w-md pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/50 focus:border-amber-400"
+          className="w-full max-w-md pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#03a54e]/40 focus:border-[#03a54e]"
         />
       </div>
 
@@ -51,7 +51,7 @@ export function RecipeList() {
           onClick={() => setActiveCategory('todas')}
           className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
             activeCategory === 'todas'
-              ? 'bg-[#1a2e1f] text-white'
+              ? 'bg-[#03a54e] text-white'
               : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-300'
           }`}
         >
@@ -63,7 +63,7 @@ export function RecipeList() {
             onClick={() => setActiveCategory(cat)}
             className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
               activeCategory === cat
-                ? 'bg-[#1a2e1f] text-white'
+                ? 'bg-[#03a54e] text-white'
                 : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-300'
             }`}
           >
@@ -84,7 +84,7 @@ export function RecipeList() {
             <Link
               key={recipe.id}
               to={`/fichas/${recipe.id}`}
-              className="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-md hover:border-amber-200 transition-all group"
+              className="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-md hover:border-[#03a54e]/30 transition-all group"
             >
               <div className="flex items-start justify-between mb-3">
                 <CategoryBadge category={recipe.category} />

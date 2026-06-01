@@ -32,7 +32,7 @@ export function RecipeDetail() {
         <div className="flex items-start justify-between mb-4">
           <div>
             <CategoryBadge category={recipe.category} />
-            <h1 className="text-2xl font-bold text-gray-900 mt-2">{recipe.name}</h1>
+            <h1 className="text-2xl font-bold text-[#000000] mt-2">{recipe.name}</h1>
             <p className="text-gray-400 text-sm mt-0.5">Rendimento: {recipe.portion_size_g}g por porção</p>
           </div>
           {recipe.pdf_url ? (
@@ -40,7 +40,7 @@ export function RecipeDetail() {
               href={recipe.pdf_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-xl text-sm font-medium hover:bg-amber-600 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-[#03a54e] text-white rounded-xl text-sm font-medium hover:bg-[#029443] transition-colors"
             >
               <Download size={14} />
               Ver PDF

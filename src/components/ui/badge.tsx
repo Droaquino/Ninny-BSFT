@@ -27,7 +27,7 @@ export function Badge({ children, variant = 'default', className }: BadgeProps) 
 
 export function CategoryBadge({ category }: { category: Category }) {
   return (
-    <Badge className="bg-amber-50 text-amber-800">
+    <Badge className="bg-[#03a54e]/10 text-[#03a54e]">
       {CATEGORY_LABELS[category]}
     </Badge>
   )

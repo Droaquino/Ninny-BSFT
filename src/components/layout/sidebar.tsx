@@ -10,7 +10,7 @@ const NAV = [
 
 export function Sidebar() {
   return (
-    <aside className="w-60 shrink-0 bg-[#1a2e1f] min-h-screen flex flex-col">
+    <aside className="w-60 shrink-0 bg-[#03a54e] min-h-screen flex flex-col">
       <div className="flex items-center gap-3 px-6 py-6 border-b border-white/10">
         <div className="w-9 h-9 rounded-full bg-[#c9a84c] flex items-center justify-center shrink-0">
           <ChefHat size={18} className="text-white" />
