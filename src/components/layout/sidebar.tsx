@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
-import { BookOpen, BarChart2, TrendingUp, ChefHat } from 'lucide-react'
+import { BookOpen, BarChart2, TrendingUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import ninnyLogo from '@/assets/ninny-logo.avif'
 
 const NAV = [
   { to: '/', icon: BookOpen, label: 'Fichas Técnicas' },
@@ -10,15 +11,9 @@ const NAV = [
 
 export function Sidebar() {
   return (
-    <aside className="w-60 shrink-0 bg-[#03a54e] min-h-screen flex flex-col">
-      <div className="flex items-center gap-3 px-6 py-6 border-b border-white/10">
-        <div className="w-9 h-9 rounded-full bg-[#c9a84c] flex items-center justify-center shrink-0">
-          <ChefHat size={18} className="text-white" />
-        </div>
-        <div>
-          <p className="text-white font-semibold text-sm leading-tight">Ninny</p>
-          <p className="text-white/50 text-xs">Gestão</p>
-        </div>
+    <aside className="w-60 shrink-0 bg-[#025c2b] min-h-screen flex flex-col">
+      <div className="flex flex-col items-center px-4 py-5 border-b border-white/10">
+        <img src={ninnyLogo} alt="Ninny" className="w-28 h-28 object-contain" />
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-1">
