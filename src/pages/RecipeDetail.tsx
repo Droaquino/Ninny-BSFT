@@ -181,7 +181,7 @@ export function RecipeDetail() {
                     <Pie data={pieData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} dataKey="value" paddingAngle={2}>
                       {pieData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                     </Pie>
-                    <Tooltip formatter={(v: number) => [formatCurrency(v), 'Custo']}
+                    <Tooltip formatter={(v) => [typeof v === 'number' ? formatCurrency(v) : v, 'Custo']}
                       contentStyle={{ borderRadius: 10, border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,.1)', fontSize: 12 }} />
                   </PieChart>
                 </ResponsiveContainer>
@@ -210,7 +210,7 @@ export function RecipeDetail() {
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1ede4" />
                 <XAxis type="number" tickFormatter={v => formatCurrency(v)} tick={{ fontSize: 11, fill: '#a8a29e' }} />
                 <YAxis type="category" dataKey="name" width={140} tick={{ fontSize: 11, fill: '#57534e' }} />
-                <Tooltip formatter={(v: number) => [formatCurrency(v)]}
+                <Tooltip formatter={(v) => [typeof v === 'number' ? formatCurrency(v) : String(v)]}
                   contentStyle={{ borderRadius: 10, border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,.1)', fontSize: 12 }} />
                 <Legend />
                 <Bar dataKey="Custo"  stackId="a" fill="#ef4444" radius={[0, 0, 0, 0]} />

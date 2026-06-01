@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom'
 import { BookOpen, TrendingUp, AlertTriangle, Star, ChevronRight } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, Legend,
+  PieChart, Pie, Cell,
 } from 'recharts'
 import { useRecipes } from '@/hooks/useRecipes'
 import { MetricCard } from '@/components/ui/metric-card'
-import { CmvBar, CmvDot } from '@/components/ui/cmv-badge'
+import { CmvBar } from '@/components/ui/cmv-badge'
 import { CategoryBadge } from '@/components/ui/badge'
-import { formatCurrency, cmvStatus } from '@/lib/utils'
+import { cmvStatus } from '@/lib/utils'
 import { CATEGORY_LABELS } from '@/types/database'
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -95,7 +95,7 @@ export function Dashboard() {
               <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1ede4" />
               <XAxis type="number" domain={[0, 60]} tickFormatter={v => `${v}%`} tick={{ fontSize: 11, fill: '#a8a29e' }} />
               <YAxis type="category" dataKey="name" width={140} tick={{ fontSize: 11, fill: '#57534e' }} />
-              <Tooltip formatter={(v: number) => [`${v}%`, 'CMV']} contentStyle={{ borderRadius: 10, border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,.1)', fontSize: 12 }} />
+              <Tooltip formatter={(v) => [`${v}%`, 'CMV']} contentStyle={{ borderRadius: 10, border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,.1)', fontSize: 12 }} />
               <Bar dataKey="cmv" radius={[0, 6, 6, 0]}>
                 {topCmv.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
               </Bar>
@@ -112,7 +112,7 @@ export function Dashboard() {
                 <Pie data={cmvDistrib} cx="50%" cy="50%" innerRadius={55} outerRadius={85} dataKey="value" paddingAngle={3}>
                   {cmvDistrib.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
                 </Pie>
-                <Tooltip formatter={(v: number) => [v, 'fichas']} contentStyle={{ borderRadius: 10, border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,.1)', fontSize: 12 }} />
+                <Tooltip formatter={(v) => [v, 'fichas']} contentStyle={{ borderRadius: 10, border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,.1)', fontSize: 12 }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
