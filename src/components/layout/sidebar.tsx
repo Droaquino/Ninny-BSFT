@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, BookOpen, BarChart2, TrendingUp, X } from 'lucide-react'
+import { LayoutDashboard, BookOpen, BarChart2, TrendingUp, X, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/hooks/useAuth'
 import ninnyLogo from '@/assets/ninny-logo.avif'
 
 const NAV = [
@@ -16,6 +17,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
+  const { user, authDisabled, signOut } = useAuth()
   return (
     <>
       {/* Overlay mobile */}
@@ -74,8 +76,23 @@ export function Sidebar({ mobileOpen, onClose }: SidebarProps) {
           ))}
         </nav>
 
-        <div className="px-6 py-4 border-t border-white/10">
-          <p className="text-white/30 text-xs">Ninny BSFT v1.0</p>
+        <div className="px-3 py-4 border-t border-white/10 space-y-3">
+          {!authDisabled && user && (
+            <div className="px-2">
+              <p className="text-white/40 text-[10px] uppercase tracking-wide">Conectado como</p>
+              <p className="text-white/80 text-xs truncate">{user.email}</p>
+            </div>
+          )}
+          {!authDisabled && user && (
+            <button
+              onClick={() => { signOut(); onClose() }}
+              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-white/60 hover:text-white hover:bg-white/8 transition-all"
+            >
+              <LogOut size={16} />
+              Sair
+            </button>
+          )}
+          <p className="text-white/30 text-xs px-2">Ninny BSFT v1.0</p>
         </div>
       </aside>
     </>
