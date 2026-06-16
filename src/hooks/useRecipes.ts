@@ -44,12 +44,20 @@ export function useRecipes() {
 
     if (!isSupabaseConfigured || !supabase) return { error: null }
 
-    const { error } = await supabase
+    // cmv_pct é coluna gerada no banco (recalculada automaticamente) — não pode ser gravada.
+    // .select() devolve as linhas afetadas: 0 linhas = bloqueado por RLS (não é erro HTTP).
+    // `as never` contorna bug de inferência do supabase-js (infere o payload como `never` com TS 6).
+    const { data, error } = await supabase
       .from('recipes')
-      .update({ sale_price: newPrice, markup, cmv_pct })
+      .update({ sale_price: newPrice, markup } as never)
       .eq('id', id)
+      .select()
 
-    return { error }
+    if (error) return { error }
+    if (!data || data.length === 0) {
+      return { error: { message: 'Sem permissão para salvar — verifique as regras de acesso do banco (RLS).' } }
+    }
+    return { error: null }
   }, [])
 
   return { recipes, loading, error, updatePrice }

@@ -7,6 +7,7 @@ import {
 } from 'recharts'
 import { useRecipes } from '@/hooks/useRecipes'
 import { MetricCard } from '@/components/ui/metric-card'
+import { LoadingState } from '@/components/ui/states'
 
 import { CategoryBadge } from '@/components/ui/badge'
 import { cmvStatus } from '@/lib/utils'
@@ -63,11 +64,7 @@ export function Dashboard() {
     ].filter(x => x.value > 0)
   }, [recipes])
 
-  if (loading) return (
-    <div className="p-8 flex items-center justify-center min-h-[60vh]">
-      <div className="w-8 h-8 border-3 border-[#03a54e] border-t-transparent rounded-full animate-spin" />
-    </div>
-  )
+  if (loading) return <LoadingState label="Carregando o painel…" />
 
   return (
     <div className="p-8 space-y-8">

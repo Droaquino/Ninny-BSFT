@@ -1,9 +1,10 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, FileText, ArrowUpDown, ChevronRight, ArrowUp } from 'lucide-react'
+import { Search, ArrowUpDown, ChevronRight, ArrowUp } from 'lucide-react'
 import { CATEGORY_LABELS, type Category } from '@/types/database'
 import { CmvBar } from '@/components/ui/cmv-badge'
 import { CategoryBadge } from '@/components/ui/badge'
+import { CardSkeleton, EmptyState } from '@/components/ui/states'
 import { formatCurrency, cmvStatus } from '@/lib/utils'
 import { useRecipes } from '@/hooks/useRecipes'
 
@@ -124,21 +125,12 @@ export function RecipeList() {
 
       {/* Grid */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl border border-stone-100 p-5 animate-pulse">
-              <div className="h-5 bg-stone-100 rounded w-2/3 mb-3" />
-              <div className="h-4 bg-stone-100 rounded w-1/2 mb-4" />
-              <div className="h-10 bg-stone-100 rounded" />
-            </div>
-          ))}
-        </div>
+        <CardSkeleton />
       ) : filtered.length === 0 ? (
-        <div className="text-center py-16 text-stone-400">
-          <FileText size={40} className="mx-auto mb-3 opacity-30" />
-          <p className="font-medium">Nenhuma ficha encontrada.</p>
-          <p className="text-sm mt-1">Tente buscar por outro nome ou categoria.</p>
-        </div>
+        <EmptyState
+          title="Nenhuma ficha encontrada"
+          message="Tente buscar por outro nome ou trocar a categoria."
+        />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filtered.map(recipe => {

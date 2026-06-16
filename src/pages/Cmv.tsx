@@ -2,8 +2,9 @@ import { useMemo } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 import { TrendingUp, AlertTriangle, CheckCircle } from 'lucide-react'
 import { CATEGORY_LABELS, type Category } from '@/types/database'
-import { formatCurrency, cmvStatus } from '@/lib/utils'
+import { cmvStatus } from '@/lib/utils'
 import { useRecipes } from '@/hooks/useRecipes'
+import { LoadingState, EmptyState } from '@/components/ui/states'
 
 const CMV_BOM     = 30
 const CMV_ATENCAO = 38
@@ -65,15 +66,16 @@ export function Cmv() {
     critico: pratos.filter(r => cmvStatus(r.cmv_pct) === 'danger').length,
   }), [pratos])
 
-  if (loading) {
-    return (
-      <div className="p-8 space-y-4">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-32 bg-white rounded-2xl border border-stone-100 animate-pulse" />
-        ))}
-      </div>
-    )
-  }
+  if (loading) return <LoadingState label="Calculando o CMV…" />
+
+  if (!pratos.length) return (
+    <div className="p-8">
+      <EmptyState
+        title="Sem pratos para analisar"
+        message="Cadastre fichas técnicas para ver a análise de CMV aqui."
+      />
+    </div>
+  )
 
   const statusMedio = cmvStatus(cmvMedio)
 
@@ -165,7 +167,7 @@ export function Cmv() {
               <YAxis type="category" dataKey="label" width={110}
                 tick={{ fontSize: 10, fill: '#57534e' }} />
               <Tooltip
-                formatter={(v: number) => [`${v.toFixed(1)}%`, 'CMV Médio']}
+                formatter={(v) => [`${Number(v).toFixed(1)}%`, 'CMV Médio']}
                 contentStyle={{ borderRadius: 10, border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,.1)', fontSize: 12 }} />
               <Bar dataKey="media" radius={[0, 6, 6, 0]}>
                 {porCategoria.map((entry, i) => (

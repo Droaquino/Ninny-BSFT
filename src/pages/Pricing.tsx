@@ -1,7 +1,9 @@
 import { useState, useMemo, useRef } from 'react'
+import { toast } from 'sonner'
 import { Search, ArrowUpDown, TrendingUp, TrendingDown, Minus, CheckSquare, Square, Zap, Loader2, Check, AlertTriangle } from 'lucide-react'
 import { CATEGORY_LABELS, type Category } from '@/types/database'
 import { CategoryBadge } from '@/components/ui/badge'
+import { RowSkeleton, EmptyState } from '@/components/ui/states'
 import { formatCurrency, cmvStatus } from '@/lib/utils'
 import { useRecipes } from '@/hooks/useRecipes'
 
@@ -29,13 +31,6 @@ const SORT_OPTIONS: { key: SortKey; label: string }[] = [
   { key: 'price_desc',label: 'Maior Preço'  },
   { key: 'diff_desc', label: 'Mais acima'   },
   { key: 'diff_asc',  label: 'Mais abaixo'  },
-]
-
-const CMV_FILTERS: { key: CmvFilter; label: string; color: string }[] = [
-  { key: 'todos',   label: 'Todos',    color: '' },
-  { key: 'bom',     label: '✅ Bom',   color: 'text-[#025c2b]' },
-  { key: 'atencao', label: '⚠️ Atenção', color: 'text-amber-700' },
-  { key: 'critico', label: '🔴 Crítico', color: 'text-red-700' },
 ]
 
 export function Pricing() {
@@ -118,14 +113,20 @@ export function Pricing() {
     setTimeout(() => inputRef.current?.select(), 0)
   }
 
-  async function commitEdit(recipe: { id: string; total_cost: number }) {
+  async function commitEdit(recipe: { id: string; name: string; total_cost: number }) {
     const newPrice = parseFloat(editValue.replace(',', '.'))
     setEditingId(null)
     if (isNaN(newPrice) || newPrice <= 0) return
 
     setSaving(prev => new Set(prev).add(recipe.id))
-    await updatePrice(recipe.id, newPrice, recipe.total_cost)
+    const { error } = await updatePrice(recipe.id, newPrice, recipe.total_cost)
     setSaving(prev => { const n = new Set(prev); n.delete(recipe.id); return n })
+
+    if (error) {
+      toast.error('Não foi possível salvar', { description: 'Tente novamente em instantes.' })
+      return
+    }
+    toast.success('Preço salvo!', { description: `${recipe.name} agora custa ${formatCurrency(newPrice)}` })
     setSaved(prev => new Set(prev).add(recipe.id))
     setTimeout(() => setSaved(prev => { const n = new Set(prev); n.delete(recipe.id); return n }), 2000)
   }
@@ -134,12 +135,19 @@ export function Pricing() {
     if (selected.size === 0) return
     setBatchLoading(true)
     const targets = filtered.filter(r => selected.has(r.id))
-    await Promise.all(targets.map(r => {
+    const results = await Promise.all(targets.map(r => {
       const newPrice = parseFloat((r.total_cost * DEFAULT_MARKUP).toFixed(2))
       return updatePrice(r.id, newPrice, r.total_cost)
     }))
     setSelected(new Set())
     setBatchLoading(false)
+
+    const falhas = results.filter(r => r.error).length
+    if (falhas > 0) {
+      toast.error(`${falhas} preço(s) não salvaram`, { description: 'Verifique a conexão e tente de novo.' })
+    } else {
+      toast.success(`Markup ${DEFAULT_MARKUP}× aplicado!`, { description: `${targets.length} prato${targets.length > 1 ? 's atualizados' : ' atualizado'}.` })
+    }
   }
 
   return (
@@ -251,16 +259,12 @@ export function Pricing() {
       {/* Tabela */}
       <div className="bg-white rounded-2xl border border-stone-100 overflow-hidden">
         {loading ? (
-          <div className="p-8 space-y-3">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="h-12 bg-stone-50 rounded-xl animate-pulse" />
-            ))}
-          </div>
+          <RowSkeleton />
         ) : filtered.length === 0 ? (
-          <div className="p-12 text-center text-stone-400">
-            <p className="font-medium">Nenhum prato encontrado.</p>
-            <p className="text-sm mt-1">Tente ajustar os filtros.</p>
-          </div>
+          <EmptyState
+            title="Nenhum prato encontrado"
+            message="Tente ajustar a busca, a categoria ou o filtro de CMV."
+          />
         ) : (
           <table className="w-full text-sm">
             <thead>
