@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import { MOCK_RECIPES } from '@/data/mock-recipes'
 import type { Recipe } from '@/types/database'
@@ -34,7 +34,25 @@ export function useRecipes() {
     fetchRecipes()
   }, [])
 
-  return { recipes, loading, error }
+  const updatePrice = useCallback(async (id: string, newPrice: number, totalCost: number) => {
+    const markup   = totalCost > 0 ? parseFloat((newPrice / totalCost).toFixed(2)) : 0
+    const cmv_pct  = newPrice  > 0 ? parseFloat(((totalCost / newPrice) * 100).toFixed(2)) : 0
+
+    setRecipes(prev => prev.map(r =>
+      r.id === id ? { ...r, sale_price: newPrice, markup, cmv_pct } : r
+    ))
+
+    if (!isSupabaseConfigured || !supabase) return { error: null }
+
+    const { error } = await supabase
+      .from('recipes')
+      .update({ sale_price: newPrice, markup, cmv_pct })
+      .eq('id', id)
+
+    return { error }
+  }, [])
+
+  return { recipes, loading, error, updatePrice }
 }
 
 export function useRecipe(id: string) {
