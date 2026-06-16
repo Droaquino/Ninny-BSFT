@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, FileText, ArrowUpDown, ChevronRight } from 'lucide-react'
+import { Search, FileText, ArrowUpDown, ChevronRight, ArrowUp } from 'lucide-react'
 import { CATEGORY_LABELS, type Category } from '@/types/database'
 import { CmvBar } from '@/components/ui/cmv-badge'
 import { CategoryBadge } from '@/components/ui/badge'
@@ -22,6 +22,13 @@ export function RecipeList() {
   const [search, setSearch]   = useState('')
   const [activeCategory, setActiveCategory] = useState<Category | 'todas'>('todas')
   const [sort, setSort] = useState<SortKey>('name')
+  const [showTop, setShowTop] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setShowTop(window.scrollY > 400)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const usedCategories = useMemo(() => {
     const cats = new Set(recipes.map(r => r.category))
@@ -160,6 +167,17 @@ export function RecipeList() {
             )
           })}
         </div>
+      )}
+
+      {/* Botão voltar ao topo */}
+      {showTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-8 right-8 z-50 flex items-center gap-2 px-4 py-2.5 bg-[#025c2b] text-white rounded-full shadow-lg hover:bg-[#03a54e] transition-all text-sm font-medium"
+        >
+          <ArrowUp size={14} />
+          Voltar ao topo
+        </button>
       )}
     </div>
   )
