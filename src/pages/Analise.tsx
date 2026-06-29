@@ -1,4 +1,4 @@
-import { TrendingUp, TrendingDown, Minus, Star, AlertTriangle, XCircle } from 'lucide-react'
+import { TrendingUp, Minus, Star, AlertTriangle, XCircle } from 'lucide-react'
 import { formatCurrency } from '@/lib/utils'
 
 type Saida = 'alta' | 'media' | 'baixa'
