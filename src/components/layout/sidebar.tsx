@@ -1,18 +1,14 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, BookOpen, BarChart2, TrendingUp, X, LogOut, Package, Globe, PieChart, UtensilsCrossed } from 'lucide-react'
+import { LayoutDashboard, BookOpen, BarChart2, TrendingUp, X, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/useAuth'
 import ninnyLogo from '@/assets/ninny-logo.avif'
 
 const NAV = [
-  { to: '/',              icon: LayoutDashboard,  label: 'Visão Geral',      end: true  },
-  { to: '/fichas',        icon: BookOpen,          label: 'Fichas Técnicas',  end: false },
-  { to: '/precificacao',  icon: BarChart2,         label: 'Precificação',     end: true  },
-  { to: '/cmv',           icon: TrendingUp,        label: 'CMV',              end: true  },
-  { to: '/insumos',       icon: Package,           label: 'Insumos',          end: true  },
-  { to: '/benchmarking',  icon: Globe,             label: 'Benchmarking',     end: true  },
-  { to: '/analise',       icon: PieChart,          label: 'Análise de Pratos',end: true  },
-  { to: '/executivo',     icon: UtensilsCrossed,   label: 'Menu Executivo',   end: true  },
+  { to: '/',             icon: LayoutDashboard, label: 'Visão Geral',     end: true  },
+  { to: '/fichas',       icon: BookOpen,        label: 'Fichas Técnicas', end: false },
+  { to: '/precificacao', icon: BarChart2,       label: 'Precificação',    end: true  },
+  { to: '/cmv',          icon: TrendingUp,      label: 'CMV',             end: true  },
 ]
 
 interface SidebarProps {
