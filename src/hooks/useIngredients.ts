@@ -58,7 +58,7 @@ export function useIngredients() {
 
     if (ris && ris.length > 0) {
       await Promise.all(ris.map((ri: { id: string; gross_weight: number }) =>
-        supabase
+        supabase!
           .from('recipe_ingredients')
           .update({
             unit_cost: newCost,
